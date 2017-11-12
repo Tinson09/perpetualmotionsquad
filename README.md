@@ -1,2 +1,3 @@
 # perpetualmotionsquad
-Projects for Hackathon
+main_app
+  django Version - 1.11.7
