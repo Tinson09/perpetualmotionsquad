@@ -1,0 +1,54 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+<script type="text/javascript">
+	var d = document.getElementById("home1");
+	d.className = "";
+	var d = document.getElementById("fapp");
+	d.className = "active";
+</script>
+<!-- BEGIN MAIN CONTENT -->
+<section class="content">
+	<div class="row">
+		<!-- BEGIN MASKED INPUT -->
+		<div class="col-md-12" style="margin-top:20px;">
+			<div class="grid">
+				<div class="grid-header">
+					<i class="fa fa-align-left"></i>
+					<span class="grid-title">Find appointments</span>
+				</div>
+				<div class="grid-body">
+					<form class="form-horizontal" role="form" method="POST" action="/home_patient/find">{% csrf_token %}
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Specialisation</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="specialization" name="specialization" placeholder="Specialization">{{ ild_data.appointment_id }}
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Doctor</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="doctor" name="doctor" placeholder="Doctor">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Date</label>
+							<div class="col-sm-7">
+								<input type="date" class="form-control" name="date" id="date" placeholder="Date">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label"></label>
+							<div class="col-sm-7">
+								<button class="btn btn-lg btn-primary btn-block" type="submit">Find</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- END MASKED INPUT -->
+	</div>
+</section>
+<!-- END MAIN CONTENT -->
+{% endblock content %}

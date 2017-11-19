@@ -1,0 +1,47 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+<script type="text/javascript">
+	var d = document.getElementById("home");
+	d.className += " active";
+	var d = document.getElementById("listhos");
+	d.className = "";
+</script>
+<div class="row" >
+	<!-- BEGIN RESPONSIVE TABLE -->
+	<div class="col-md-12">
+		<div class="grid no-border">
+			<div class="grid-header">
+				<i class="fa fa-hospital-o"></i>
+				<span class="grid-title">Sessions</span>
+			</div>
+			<div class="grid-body">
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Date</th>
+								<th>Day</th>
+								<th>Hospital</th>
+								<th>Start time</th>
+								<th>End time</th>
+							</tr>
+						</thead>
+						<tbody>
+						{% for obj in session %}
+							<tr >
+								<td>{{ obj.date }}
+								<td>{{ obj.day_of_week }}</td>
+								<td>{{ obj.hospital.hospital_name }}</td>
+								<td>{{ obj.start_time }}</td>
+								<td>{{ obj.end_time }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}

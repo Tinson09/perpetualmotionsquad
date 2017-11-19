@@ -1,0 +1,45 @@
+{% extends "users/base.html" %}
+{% block content %}
+<section class="content">
+	<div class="row">
+		<!-- BEGIN MASKED INPUT -->
+		<div class="col-md-12" style="margin-top:20px;">
+			<div class="grid">
+				<div class="grid-header">
+					<i class="fa fa-align-left"></i>
+					<span class="grid-title">Are you sure you want to delete the appointment?</span>
+				</div>
+				<div class="grid-body">
+					<form class="form-horizontal" role="form" method="POST" action="/home_patient/delete/{{ old_data.appointment_id }}">{% csrf_token %}
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Doctor</label>
+							<div class="col-sm-7">
+								<input value="{{ old_data.doctor.user.name }}" type="text" class="form-control" id="doctor" name="doctor" placeholder="Doctor">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Date</label>
+							<div class="col-sm-7">
+								<input class="form-control" name="date" id="date" placeholder="Date" value="{{ old_data.session.date }}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Day</label>
+							<div class="col-sm-7">
+								<input type="Day" class="form-control" name="Day" id="Day" placeholder="Day" value="{{ old_data.session.day_of_week }}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label"></label>
+							<div class="col-sm-7">
+								<button class="btn btn-lg btn-primary btn-block" type="submit">Delete</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- END MASKED INPUT -->
+	</div>
+</section>
+{% endblock content %}

@@ -1,0 +1,42 @@
+{% extends "users/base.html" %}
+{% block content %}
+<script type="text/javascript">
+	var d = document.getElementById("listhos");
+	d.className = " active";
+	var d = document.getElementById("home");
+	d.className = "";
+</script>
+<div class="row" >
+	<!-- BEGIN RESPONSIVE TABLE -->
+	<div class="col-md-12">
+		<div class="grid no-border">
+			<div class="grid-header">
+				<i class="fa fa-hospital-o"></i>
+				<span class="grid-title">Hospitals</span>
+			</div>
+			<div class="grid-body">
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Hospital ID</th>
+								<th>Hospital name</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for obj in hospitals %}
+							<tr>
+								<td><a href="/home_doctor/hospitals/{{ obj.hospital.hospital_id }}">{{ obj.hospital.hospital_id }}</a></td>
+								<td>{{ obj.hospital.hospital_name }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+	<!-- END RESPONSIVE TABLE -->
+{% endblock content %}
