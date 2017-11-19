@@ -1,0 +1,108 @@
+{% extends "users/base2.html" %}
+
+{% block content %}
+
+<script type="text/javascript">
+	var d = document.getElementById("home1");
+	d.className = " ";
+	var d = document.getElementById("addh");
+	d.className = "";
+	var d = document.getElementById("createses");
+	d.className = " active";
+	
+</script>
+
+
+
+
+
+<section class="content">
+	<div class="row">
+		<!-- BEGIN MASKED INPUT -->
+		<div class="col-md-12" style="margin-top:20px;">
+			<div class="grid">
+				<div class="grid-header">
+					<i class="fa fa-align-left"></i>
+					<span class="grid-title">Create session</span>
+				</div>
+				<div class="grid-body">
+					<form class="form-horizontal" role="form" method="POST" action="/hospital/{{ hid }}/createsession">{% csrf_token %}
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Day</label>
+							<div class="col-sm-7">
+								<select type="text" class="form-control" id="hospital_id" name="day">
+									<option value="Monday">Monday</option>
+									<option value="Tuesday">Tuesday</option>
+									<option value="Wednesday">Wednesday</option>
+									<option value="Thursday">Thursday</option>
+									<option value="Friday">Friday</option>
+									<option value="Saturday">Saturday</option>
+									<option value="Sunday">Sunday</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Start Time</label>
+							<div class="col-sm-7">
+								<input type="time" class="form-control"  name="stime" placeholder="Start Time">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Number of patients</label>
+							<div class="col-sm-7">
+								<input type="number" class="form-control"  name="num" placeholder="Number of patients">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Doctor</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="doctor" name="doctor" placeholder="Doctor">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Approx Time</label>
+							<div class="col-sm-7">
+								<input type="text" id="time" class="form-control"  name="apptime" placeholder="Approx Time">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">End Time</label>
+							<div class="col-sm-7">
+								<input type="time" class="form-control"  name="etime" placeholder="End Time">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Limit Option</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control"  name="loption" placeholder="Limit Option">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label"></label>
+							<div class="col-sm-7">
+								<button class="btn btn-lg btn-primary btn-block" type="submit">Add session</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- END MASKED INPUT -->
+	</div>
+</section>
+<script src="/static/plugins/jquery-2.1.0.min.js"></script>
+<script src="/static/plugins/jquery-maskedinput/jquery.maskedinput.min.js"></script>
+<script>
+	/* MASKED INPUT */
+	$.mask.definitions['~']='[+-]';
+		$('#time').mask('99:99');
+		$('#phone').mask('(999) 999-9999');
+		$('#phoneext').mask("(999) 999-9999? x99999");
+		$("#tin").mask("99-9999999999");
+		$("#ssn").mask("999-99-9999");
+		$("#product").mask("a*-999-a999",{placeholder:" ",completed:function(){alert("You typed the following: "+this.val());}});
+		$("#eyescript").mask("~9.99 ~9.99 999");
+</script>
+
+<!-- END MAIN CONTENT -->
+{% endblock content %}
