@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.db import models
+import datetime
+from datetime import timedelta
 
 
 '''
@@ -64,7 +66,7 @@ class Session(models.Model):
     num_patients = models.IntegerField()
     num_reg_patients = models.IntegerField()
     doctor = models.ForeignKey(Doctor)
-    approx_time = models.DurationField()
+    approx_time = models.DurationField(default=timedelta(minutes=20))
     end_time = models.TimeField()
     choice = (('n', 'Number of Patients'), ('t', 'Approximate Time'), ('b', 'Both'))
     limit_option = models.CharField(max_length = 1, choices = choice) 

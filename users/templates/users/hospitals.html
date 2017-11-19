@@ -1,0 +1,61 @@
+{% extends "users/base2.html" %}
+{% block content %}
+<script type="text/javascript">
+	var d = document.getElementById("home1");
+	d.className = " ";
+	var d = document.getElementById("addh");
+	d.className = "active";
+	var d = document.getElementById("createses");
+	d.className = "";
+</script>
+<!-- BEGIN MAIN CONTENT -->
+<section class="content">
+	<div class="row">
+		<!-- BEGIN MASKED INPUT -->
+		<div class="col-md-12" style="margin-top:20px;">
+			<div class="grid">
+				<div class="grid-header">
+					<i class="fa fa-align-left"></i>
+					<span class="grid-title">Register Hospital</span>
+				</div>
+				<div class="grid-body">
+					<form class="form-horizontal" role="form" method="POST" action="/hospital/{{ hid }}/addhospital">{% csrf_token %}
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Hospital</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="hospital" name="hospital" placeholder="Hospital">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Location</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="location" name="location" placeholder="Location">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Description</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" name="description" id="description" placeholder="Description">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Image</label>
+							<div class="col-sm-7">
+								<input type="file" class="form-control" name="image" id="image" placeholder="Image">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label"></label>
+							<div class="col-sm-7">
+								<button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- END MASKED INPUT -->
+	</div>
+</section>
+<!-- END MAIN CONTENT -->
+{% endblock content %}

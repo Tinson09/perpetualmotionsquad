@@ -1,0 +1,24 @@
+{% extends "users/base2.html" %}
+{% block content %}
+<script type="text/javascript">
+	var d = document.getElementById("home1");
+	d.className = " active";
+	var d = document.getElementById("addh");
+	d.className = "";
+	var d = document.getElementById("createses");
+	d.className = "";
+</script>
+<section class="content">
+				<div class="row">
+					<!-- BEGIN MASKED INPUT -->
+					<div class="col-md-12">
+						<div class="grid">
+							<div class="grid-header" style="margin-top:20px;">
+								<i class="fa fa-align-left"></i>
+								<span class="grid-title">{{ hospital }}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+</section>		
+{% endblock content %}

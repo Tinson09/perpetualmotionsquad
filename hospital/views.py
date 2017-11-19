@@ -1,24 +1,23 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.shortcuts import render
-from django.views import View
 from django.core.urlresolvers import reverse_lazy
 from . import forms
-from django.http import HttpResponseNotAllowed
-from django.shortcuts import render,reverse, HttpResponseRedirect, get_object_or_404,HttpResponse
-from django.contrib.sessions.backends.base.SessionBase
+from django.http import HttpResponseNotAllowed,HttpResponseRedirect,HttpResponse
+from django.shortcuts import get_object_or_404
+#from django.contrib.sessions.backends.base.SessionBase
 from datetime import datetime, timedelta
 from django.template import loader
 from users.models import *
 
 
-def createsession(ndate, date, nstart_time, nnum_patients, ndoctor, napprox_time, nend_time, nlimit_option, nverify):
-    sess = models.Session(day_of_week = ndate, date = date, start_time = nstart_time, num_patients = nnum_patients, num_reg_patients = 0,doctor = ndoctor, approx_time = napprox_time, end_time = nend_time, limit_option = nlimit_option, verify = nverify)
+def createsession(hospital,ndate, date, nstart_time, nnum_patients, ndoctor, napprox_time, nend_time, nlimit_option):
+    sess = Session(hospital=hospital,day_of_week = ndate, date = date, start_time = nstart_time, num_patients = nnum_patients, num_reg_patients = 0,doctor = ndoctor, approx_time = napprox_time, end_time = nend_time, limit_option = nlimit_option)
     sess.save()
     #Need to add hospital to the table
 
 def registerdoctor(hospital, doctor):
-    sess = models.DoctorList(hospital = hospital, doctor = doctor)
+    sess = DoctorList(hospital = hospital, doctor = doctor)
     sess.save()
 
 def getlistofappointment(sess):
@@ -31,65 +30,75 @@ def getday(date):
     date.weekday()
 
 
-def hospital_home(request):
+def hospital_home(request,**kwargs):
+    hospitalid = kwargs['hid']
     if request.method == 'POST':
         hospital = request.POST.get('')
         request.session['hospital_id'] = hospital
-    template = loader.get_template('.html')
-    query = models.Hospital.objects.get(hospital = hospital)
+    template = loader.get_template('users/hospitalhome.html')
+    query = Hospital.objects.get(hospital_id = hospitalid)
     propic = query.hospital_image
     hospitalname = query.hospital_name
     user = request.user
-    profile = umodel.Profile.objects.get(user = user)
-    return HttpResponseRedirect({'profile':profile, 'hospital':hospital_name, 'hospital_image':propic})
+    profile = Profile.objects.get(user = user)
+    return HttpResponse(template.render({'profile':profile, 'hospital':hospitalname, 'hospital_image':propic ,'hid':hospitalid}, request))
         
 # Function for hospital to create a session
-def createsessionview(request):
+def createsessionview(request,**kwargs):
+    hospital_id = kwargs['hid']
+    url='/hospital/'+kwargs['hid']+'/home'
     if request.method == 'POST':
-        day = request.POST.get('')
-        start_time = request.POST.get('')
-        num_patients = request.POST.get('')
-        doctor = request.POST.get('')
-        approx_time = request.POST.get('')
-        end_time = request.POST.get('')
-        limit_option = request.POST.get('')
-        j = datetime.now()
-        for i in range(0:8:7):
+        day = request.POST.get('hospital_id')
+        start_time = request.POST.get('stime')
+        num_patients = request.POST.get('num')
+        doctor1 = request.POST.get('doctor')
+        doctor = Doctor.objects.get(user = doctor1)
+        approx_time = request.POST.get('apptime')
+        end_time = request.POST.get('etime')
+        hospital = Hospital.objects.get(hospital_id=hospital_id)
+        limit_option = request.POST.get('loption')
+        j = datetime.datetime.now()
+        for i in range(0,7):
             j += timedelta(days = i)
-            createsession(day, j, start_time, num_patients, doctor, approx_time, end_time, limit_option, False)
-    template = loader.get_template('.html')
+            createsession(hospital,day, j, start_time, num_patients, doctor, approx_time, end_time, limit_option)
+        return HttpResponseRedirect(url)
+
+    template = loader.get_template('users/createsession.html')
     user = request.user
-    profile = umodel.Profile.objects.get(user = user)
-    return HttpResponseRedirect(template.render({'profile':profile, 'success':True}, request)) #Redirect to home page
+    profile = Profile.objects.get(user = request.user)
+    return HttpResponse(template.render({'profile':profile, 'success':True , 'hid':hospital_id}, request)) #Redirect to home page
 
 # Function for hospital to register a new doctor into their system
 def regdoctor(request):
     if request.method == 'POST':
-        doctor = request.POST.get('')
-        hospital = request.session['hospital_id']
+        doctor = request.POST.get('doctor')
+        hospital1 = request.POST.get('hospital_id')
+        hospital = Hospital.objects.get(hospital_id=hospital1)
         registerdoctor(hospital, doctor)
-    template = loader.get_template('.html')
+    template = loader.get_template('users/regdoctor.html')
     user = request.user
-    profile = umodel.Profile.objects.get(user = user)
-    return HttpResponseRedirect(template.render({'profile':profile, 'success': True}, request)) #redirect to home page
+    profile = Profile.objects.get(user = request.user)
+    return HttpResponse(template.render({'profile':profile, 'success': True}, request)) #redirect to home page
 
-def reghospital(request):
+def reghospital(request,**kwargs):
+    url='/hospital/'+kwargs['hid']+'/home'
     if request.method == 'POST':
-        hospital_name = request.POST.get('')
-        location = request.POST.get('')
-        hospital_description = request.POST.get('')
-        hospital_image = request.POST.get('')
-        mod = models.Hospital(hospital_name=hospital_name,location=loaction, hospital_description=hospital_description, hospital_image=hospital_image)
+        hospital_name = request.POST.get('hospital')
+        location = request.POST.get('location')
+        hospital_description = request.POST.get('description')
+        hospital_image = request.POST.get('image')
+        mod = Hospital(hospital_name=hospital_name,location=location, hospital_description=hospital_description, hospital_image=hospital_image,admin=Profile.objects.get(user=request.user))
         mod.save()
+        return HttpResponseRedirect(url)
     
-    template = loader.get_template('.html')
+    template = loader.get_template('users/hospitals.html')
     user = request.user
-    profile = umodel.Profile.objects.get(user = user)
-    return HttpResponseRedirect(template.render({'profile':profile, 'success':True}, request))
+    profile = Profile.objects.get(user = user)
+    return HttpResponse(template.render({'profile':profile, 'success':True ,'hid':kwargs['hid']}, request))
 
 # Given a date get all the sessions.
-def gettimetablebydate(request):
-    hospital = request.session['hospital_id']
+def gettimetablebydate(request,**kwargs):
+    hospital = kwargs['hid']
     if request.method == 'POST':
         date = request.POST.get('')
         day = getday(date)
